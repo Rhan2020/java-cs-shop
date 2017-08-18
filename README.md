@@ -1,5 +1,5 @@
 ﻿# java-cs-shop
-一个基于CS架构、用swing写的超市收银系统。
+一个基于CS架构、Socket、多线程，用swing写的超市收银管理系统。
 
 ### 实现功能
 
