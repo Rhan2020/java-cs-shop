@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
+	<classpathentry kind="lib" path="E:/eclipse/plugins/org.eclipse.osgi_3.10.101.v20150820-1432.jar" sourcepath="E:/eclipse/plugins/org.eclipse.osgi_3.10.101.v20150820-1432.jar"/>
+	<classpathentry kind="lib" path="E:/eclipse/plugins/org.eclipse.core.commands_3.7.0.v20150422-0725.jar" sourcepath="E:/eclipse/plugins/org.eclipse.core.commands_3.7.0.v20150422-0725.jar"/>
+	<classpathentry kind="lib" path="E:/eclipse/plugins/org.eclipse.equinox.common_3.7.0.v20150402-1709.jar" sourcepath="E:/eclipse/plugins/org.eclipse.equinox.common_3.7.0.v20150402-1709.jar"/>
+	<classpathentry kind="lib" path="E:/eclipse/plugins/org.eclipse.equinox.registry_3.6.0.v20150318-1503.jar" sourcepath="E:/eclipse/plugins/org.eclipse.equinox.registry_3.6.0.v20150318-1503.jar"/>
+	<classpathentry kind="lib" path="E:/eclipse/plugins/org.eclipse.core.runtime_3.11.1.v20150903-1804.jar" sourcepath="E:/eclipse/plugins/org.eclipse.core.runtime_3.11.1.v20150903-1804.jar"/>
+	<classpathentry kind="lib" path="E:/eclipse/plugins/org.eclipse.text_3.5.400.v20150505-1044.jar" sourcepath="E:/eclipse/plugins/org.eclipse.text_3.5.400.v20150505-1044.jar"/>
+	<classpathentry kind="lib" path="E:/eclipse/plugins/org.eclipse.jface_3.11.0.v20150602-1400.jar" sourcepath="E:/eclipse/plugins/org.eclipse.jface_3.11.0.v20150602-1400.jar"/>
+	<classpathentry kind="lib" path="E:/eclipse/plugins/org.eclipse.jface.text_3.10.0.v20150603-1752.jar" sourcepath="E:/eclipse/plugins/org.eclipse.jface.text_3.10.0.v20150603-1752.jar"/>
+	<classpathentry kind="lib" path="E:/eclipse/plugins/org.eclipse.ui.workbench_3.107.0.v20150825-2206.jar" sourcepath="E:/eclipse/plugins/org.eclipse.ui.workbench_3.107.0.v20150825-2206.jar"/>
+	<classpathentry kind="lib" path="E:/eclipse/plugins/com.ibm.icu_54.1.1.v201501272100.jar" sourcepath="E:/eclipse/plugins/com.ibm.icu_54.1.1.v201501272100.jar"/>
+	<classpathentry kind="lib" path="E:/eclipse/plugins/org.eclipse.ui.forms_3.6.200.v20150506-2029.jar" sourcepath="E:/eclipse/plugins/org.eclipse.ui.forms_3.6.200.v20150506-2029.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
