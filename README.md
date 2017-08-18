@@ -12,12 +12,12 @@
 
 ### 项目架构
 
-* ![modelPNG](https://github.com/JieDreambuilder/java-cs-shop/blob/master/readmeImg/model.jpg)
+* ![modelPNG](https://github.com/JieDreambuilder/java-cs-shop/blob/master/readmeImg/model.png)
 * ![model2PNG](https://github.com/JieDreambuilder/java-cs-shop/blob/master/readmeImg/model2.png)
 
 ### 部分项目运行截图
 
-* ![loginPNG](https://github.com/JieDreambuilder/java-cs-shop/blob/master/readmeImg/login.jpg)
+* ![loginPNG](https://github.com/JieDreambuilder/java-cs-shop/blob/master/readmeImg/login.png)
 * ![indexPNG](https://github.com/JieDreambuilder/java-cs-shop/blob/master/readmeImg/index.png)
 * ![countPNG](https://github.com/JieDreambuilder/java-cs-shop/blob/master/readmeImg/count.png)
 * ![oddchangePNG](https://github.com/JieDreambuilder/java-cs-shop/blob/master/readmeImg/oddchange.png)
