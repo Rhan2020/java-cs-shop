@@ -5,33 +5,39 @@ import com.Jie.net.Net;
 
 public class Model {
 	public static int doLogin(String username,String password){
-		int flag=0;//    1±íÊ¾µÇÂ¼ÊÕÒøÔ±×´Ì¬£¬0±íÊ¾Î´µÇÂ¼
+		int flag=0;//    1ï¿½ï¿½Ê¾ï¿½ï¿½Â¼ï¿½ï¿½ï¿½ï¿½Ô±×´Ì¬ï¿½ï¿½0ï¿½ï¿½Ê¾Î´ï¿½ï¿½Â¼
 		/*
-		 * ´ò°üÓÃ»§ĞÅÏ¢
+		 * ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½Ï¢
 		 */
 		Entity e =new Entity();
 		e.setFlag(flag);
 		e.setUsername(username);
 		e.setPassword(password);
-		//Ö´ĞĞµÇÂ¼
+		//Ö´ï¿½Ğµï¿½Â¼
 		e=Net.conn(e);
-		//·µ»ØÓÃ»§×´Ì¬  1´ú±íÊÕÒøÔ± 2´ú±í²Ö¹Ü 3´ú±í³¬¼¶¹ÜÀíÔ±  0´ú±í²»´æÔÚ
+		//ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½×´Ì¬  1ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô± 2ï¿½ï¿½ï¿½ï¿½ï¿½Ö¹ï¿½ 3ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô±  0ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		return e.getFlag();
 	}
 
 	public static String goodsFindById(String goodsid) {
 		// TODO Auto-generated method stub
-		int flag=4;//4±íÊ¾¸ù¾İID²éÑ¯ÉÌÆ·
+		int flag=4;//4è¡¨ç¤ºæ ¹æ®IDæŸ¥è¯¢å•†å“
 		Entity e =new Entity();
 		e.setGoodsid(goodsid);
 
 		e.setFlag(flag);
 		e=Net.conn(e);
+		
+		// æ£€æŸ¥å•†å“æ˜¯å¦æ‰¾åˆ°
+		if (e.getGoodsid() == null || e.getGoodsname() == null) {
+			return null; // å•†å“ä¸å­˜åœ¨
+		}
+		
 		return e.getGoodsid()+","+e.getGoodsname()+","+e.getGoodsprice()+","+e.getGoodscount();
 	}
 	
 	public static boolean addGoods(Entity e){
-		int flag=5;//5´ú±íĞÂÔöÉÌÆ·
+		int flag=5;//5ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ·
 		e.setFlag(flag);
 		e=Net.conn(e);
 		return e.isResult();
@@ -39,7 +45,7 @@ public class Model {
 
 	public static boolean delGoods(Entity e1) {
 		// TODO Auto-generated method stub
-		int flag=6;//6´ú±íÉ¾³ıÉÌÆ·
+		int flag=6;//6ï¿½ï¿½ï¿½ï¿½É¾ï¿½ï¿½ï¿½ï¿½Æ·
 		e1.setFlag(flag);
 		e1=Net.conn(e1);
 		return e1.isResult();
@@ -47,14 +53,14 @@ public class Model {
 
 	public static boolean updateGoods(Entity e1) {
 		// TODO Auto-generated method stub
-		int flag=7;//7´ú±íĞŞ¸ÄÉÌÆ·
+		int flag=7;//7ï¿½ï¿½ï¿½ï¿½ï¿½Ş¸ï¿½ï¿½ï¿½Æ·
 		e1.setFlag(flag);
 		e1=Net.conn(e1);
 		return e1.isResult();
 	}
 
 	public static boolean addUser(Entity e1) {
-		int flag=10;//5´ú±íĞÂÔöÉÌÆ·
+		int flag=10;//5ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ·
 		e1.setFlag(flag);
 		e1=Net.conn(e1);
 		return e1.isResult();
@@ -71,7 +77,7 @@ public class Model {
 
 	public static boolean updateUser(Entity e1) {
 		// TODO Auto-generated method stub
-		int flag=12;//7´ú±íĞŞ¸ÄÉÌÆ·
+		int flag=12;//7ï¿½ï¿½ï¿½ï¿½ï¿½Ş¸ï¿½ï¿½ï¿½Æ·
 		e1.setFlag(flag);
 		e1=Net.conn(e1);
 		return e1.isResult();
@@ -79,11 +85,17 @@ public class Model {
 
 	public static String findUser(String username) {
 		// TODO Auto-generated method stub
-		int flag=13;//7´ú±íĞŞ¸ÄÉÌÆ·
+		int flag=13;//13è¡¨ç¤ºæŸ¥è¯¢ç”¨æˆ·
 		Entity e1 =new Entity();
 		e1.setFlag(flag);
 		e1.setUsername(username);
 		e1=Net.conn(e1);
+		
+		// æ£€æŸ¥ç”¨æˆ·æ˜¯å¦æ‰¾åˆ°
+		if (e1 == null || e1.getUsername() == null) {
+			return null; // ç”¨æˆ·ä¸å­˜åœ¨
+		}
+		
 		return e1.getUsername()+","+e1.getPassword()+","+e1.getRole();
 	}
 }

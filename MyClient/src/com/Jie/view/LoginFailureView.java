@@ -32,7 +32,7 @@ public class LoginFailureView extends JFrame {
 	public LoginFailureView() {
 		
 		/*
-		 * Swing Ò³ÃæÉú³É²¿·Ö 
+		 * Swing é¡µé¢å¸ƒå±€ç”Ÿæˆéƒ¨åˆ† 
 		 */
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 623, 426);
@@ -42,18 +42,18 @@ public class LoginFailureView extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JLabel label = new JLabel("\u6B22\u8FCE\u8FDB\u5165\u8D85\u5E02\u7BA1\u7406\u7CFB\u7EDF");
-		label.setFont(new Font("ËÎÌå", Font.PLAIN, 18));
+		JLabel label = new JLabel("æ¬¢è¿è¿›å…¥è¶…å¸‚ç®¡ç†ç³»ç»Ÿ");
+		label.setFont(new Font("å®‹ä½“", Font.PLAIN, 18));
 		label.setBounds(212, 10, 180, 47);
 		contentPane.add(label);
 		
-		JLabel label_1 = new JLabel("\u7528\u6237\u540D\uFF1A");
-		label_1.setFont(new Font("ËÎÌå", Font.PLAIN, 16));
+		JLabel label_1 = new JLabel("ç”¨æˆ·åï¼š");
+		label_1.setFont(new Font("å®‹ä½“", Font.PLAIN, 16));
 		label_1.setBounds(159, 126, 78, 32);
 		contentPane.add(label_1);
 		
-		JLabel label_2 = new JLabel("\u5BC6\u7801\uFF1A");
-		label_2.setFont(new Font("ËÎÌå", Font.PLAIN, 16));
+		JLabel label_2 = new JLabel("å¯†ç ï¼š");
+		label_2.setFont(new Font("å®‹ä½“", Font.PLAIN, 16));
 		label_2.setBounds(170, 188, 54, 26);
 		contentPane.add(label_2);
 		
@@ -66,11 +66,11 @@ public class LoginFailureView extends JFrame {
 		passwordField.setBounds(227, 185, 194, 29);
 		contentPane.add(passwordField);
 		
-		JButton button = new JButton("\u767B\u5F55");//´´½¨µÇÂ¼°´Å¥
+		JButton button = new JButton("ç™»å½•");//ç™»å½•æŒ‰é’®
 		button.addActionListener(new ActionListener() {
 			/*
-			 * µÇÂ¼²Ù×÷
-			 * µã»÷µÇÂ½°´Å¥£¬´¥·¢µÇÂ¼·½·¨
+			 * ç™»å½•é€»è¾‘
+			 * ç‚¹å‡»ç™»å½•æŒ‰é’®æ‰§è¡Œç™»å½•é€»è¾‘
 			 */
 			public void actionPerformed(ActionEvent arg0) {
 				String username=textField.getText();
@@ -82,17 +82,17 @@ if (able) {
 					int flag=0;
 					flag=Model.doLogin(username, password);
 					if(flag==1){
-						dispose();//¹Ø±ÕÔ­À´´°¿Ú
+						dispose();//å…³é—­åŸçª—å£
 						/*
-						 * ÊÕÒøÔ±Ò³Ãæ
+						 * æ”¶é“¶å‘˜é¡µé¢
 						 */
 						CashierView ts=new CashierView(username);
 						ts.setVisible(true);
 					}
 					if(flag==2){
-						dispose();//¹Ø±ÕÔ­À´´°¿Ú
+						dispose();//å…³é—­åŸçª—å£
 						/*
-						 * ²Ö¿â¹ÜÀíÔ±Ò³Ãæ
+						 * ä»“åº“ç®¡ç†å‘˜é¡µé¢
 						 */
 						WarehouseView wv=new WarehouseView(username);
 						wv.setVisible(true);
@@ -100,36 +100,36 @@ if (able) {
 					}
 					if(flag==3){
 						/*
-						 * ³¬¼¶¹ÜÀíÔ±Ò³Ãæ
+						 * ç³»ç»Ÿç®¡ç†å‘˜é¡µé¢
 						 */
-						dispose();//¹Ø±ÕÔ­À´´°¿Ú
+						dispose();//å…³é—­åŸçª—å£
 						UserManager um =new UserManager(username);
 						um.setVisible(true);
 					}
 					if(flag==0||flag==9){
 						/*
-						 * ÊäÈëÃÜÂë´íÎóÒ³Ãæ
+						 * æ˜¾ç¤ºé”™è¯¯æç¤ºé¡µé¢
 						 */
 						
-						dispose();//¹Ø±ÕÔ­À´´°¿Ú
+						dispose();//å…³é—­åŸçª—å£
 						LoginFailureView lfv =new LoginFailureView();
 						lfv.setVisible(true);
 					}
 				}else{
 					/*
-					 * ÌáÊ¾ÊäÈëÕË»§ÃÜÂë½çÃæ
+					 * æ˜¾ç¤ºç”¨æˆ·åæˆ–å¯†ç é”™è¯¯
 					 */
-					dispose();//¹Ø±ÕÔ­À´´°¿Ú
+					dispose();//å…³é—­åŸçª—å£
 					ReloginView rl =new ReloginView();
 					rl.setVisible(true);
 				}
 			}
 		});
-		button.setFont(new Font("ËÎÌå", Font.PLAIN, 16));
+		button.setFont(new Font("å®‹ä½“", Font.PLAIN, 16));
 		button.setBounds(241, 261, 150, 44);
 		contentPane.add(button);
 		
-		JLabel lblNewLabel = new JLabel("\u767B\u5F55\u540D\u6216\u5BC6\u7801\u9519\u8BEF\uFF01");
+		JLabel lblNewLabel = new JLabel("ç™»å½•åæˆ–å¯†ç é”™è¯¯ï¼");
 		lblNewLabel.setForeground(Color.RED);
 		lblNewLabel.setBounds(228, 225, 150, 15);
 		contentPane.add(lblNewLabel);

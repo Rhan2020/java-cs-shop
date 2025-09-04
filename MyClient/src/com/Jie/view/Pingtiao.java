@@ -7,7 +7,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import com.ibm.icu.text.SimpleDateFormat;
+import java.text.SimpleDateFormat;
 
 import javax.swing.JButton;
 import java.awt.Font;
@@ -22,7 +22,7 @@ public class Pingtiao extends JFrame {
 	private JPanel contentPane;
 
 	public Pingtiao(String messages) {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 355, 258);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -35,7 +35,7 @@ public class Pingtiao extends JFrame {
 				dispose();
 			}
 		});
-		btnNewButton.setFont(new Font("ËÎÌå", Font.PLAIN, 16));
+		btnNewButton.setFont(new Font("ï¿½ï¿½ï¿½ï¿½", Font.PLAIN, 16));
 		btnNewButton.setBounds(121, 172, 99, 38);
 		contentPane.add(btnNewButton);
 		
@@ -45,7 +45,7 @@ public class Pingtiao extends JFrame {
 		contentPane.add(txtrAaa);
 		
 		
-		//¸ñÊ½»¯Ê±¼ä²Ù×÷
+		//ï¿½ï¿½Ê½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½
 		Date d =new Date();
 		SimpleDateFormat d2=new SimpleDateFormat("yyyy MM dd HH mm ss"); 
 		JLabel lblNewLabel = new JLabel(d2.format(d));

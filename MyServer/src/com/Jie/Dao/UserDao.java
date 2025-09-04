@@ -15,7 +15,7 @@ import com.Jie.Entity.Entity;
 public class UserDao {
 
 	/**
-	 * ÊµÏÖµÇÂ¼·½·¨
+	 * Êµï¿½Öµï¿½Â¼ï¿½ï¿½ï¿½ï¿½
 	 */
 
 	public int doLogin(User lu) {
@@ -28,12 +28,16 @@ public class UserDao {
 		
 		try {
 			conn = DBUtils.getConnection();
+			if (conn == null) {
+				System.err.println("è·å–è¿æ¥å¤±è´¥");
+				return 0;
+			}
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, lu.getUsername());
-			rs = ps.executeQuery();//½ÓÊÜ½á¹û¼¯
+			rs = ps.executeQuery();//ï¿½ï¿½ï¿½Ü½ï¿½ï¿½ï¿½ï¿½
 			if (rs.next()) {
 				u = new User();
-				//¶ÁÈ¡½á¹û¼¯ÀïµÄÊôĞÔ£¬³õÊ¼»¯µ½ĞÂ¶ÔÏóÖĞ
+				//ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô£ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½Â¶ï¿½ï¿½ï¿½ï¿½ï¿½
 				u.setUsername(rs.getString("username"));
 				u.setPassword(rs.getString("password"));
 				u.setFlag(rs.getInt("flag"));
@@ -42,12 +46,8 @@ public class UserDao {
 					return u.flag;
 				}
 				
-				if(u.getUsername().equals(lu.getUsername())){
-					return 9;// ·µ»Ø9±íÊ¾ÓÃ»§ÒÑ´æÔÚ      ¹©ĞÂÔö¡¢É¾³ı ·½·¨µ÷ÓÃ
-				}
-				
-				else{
-					u.flag = 0;
+				if(u.getUsername().equals(lu.getUsername())&&!u.getPassword().equals(lu.getPassword())){
+					return 9;// è¿”å›9è¡¨ç¤ºç”¨æˆ·å·²å­˜åœ¨ä½†å¯†ç é”™è¯¯
 				}
 			}else{
 				return 0;
@@ -70,34 +70,39 @@ public class UserDao {
 			PreparedStatement ps = null;
 			ResultSet rs = null;
 			String sql = "";
-			sql = "insert into user (username,password,flag)value(?,?,?)";
+			sql = "insert into user (username,password,flag) values(?,?,?)";
 			
 			try {
 				conn = DBUtils.getConnection();
+				if (conn == null) {
+					System.err.println("è·å–è¿æ¥å¤±è´¥");
+					return false;
+				}
 				ps = conn.prepareStatement(sql);
 				ps.setString(1, ad.getUsername());
 				ps.setString(2, ad.getPassword());
 				ps.setInt(3, ad.getRole());
 				int num = ps.executeUpdate();
+				if (num > 0) {
+					return true;
+				} else {
+					return false;
+				}
 			} catch (SQLException e) {
 				e.printStackTrace();
+				return false;
 			} finally {
 				DBUtils.close(rs, ps, conn);
 			}
 		}else{
-			System.out.println("ÓÃ»§ÒÑ´æÔÚ£¡");
+			System.out.println("ç”¨æˆ·å·²å­˜åœ¨ï¼");
 			return false;
 		}
-		
-		return true;
 	}
 	public boolean del(Entity e) {
-		// TODO Auto-generated method stub
-		UserDao ud =new UserDao();
-		User u =new User();
-		u.setUsername(e.getUsername());
-		u.setPassword(e.getPassword());
-		if(ud.doLogin(u)!=0){
+		// æ£€æŸ¥ç”¨æˆ·æ˜¯å¦å­˜åœ¨ï¼ˆåªéœ€è¦ç”¨æˆ·åï¼‰
+		Entity userExists = findUser(e.getUsername());
+		if(userExists != null){
 			Connection conn = null;
 			PreparedStatement ps = null;
 			ResultSet rs = null;
@@ -106,27 +111,38 @@ public class UserDao {
 			
 			try {
 				conn = DBUtils.getConnection();
+				if (conn == null) {
+					System.err.println("è·å–è¿æ¥å¤±è´¥");
+					e.setResult(false);
+					return false;
+				}
 				ps = conn.prepareStatement(sql);
 				ps.setString(1, e.getUsername());
 				int num = ps.executeUpdate();
-				e.setResult(true);
+				if (num > 0) {
+					e.setResult(true);
+					return true;
+				} else {
+					e.setResult(false);
+					return false;
+				}
 			} catch (SQLException e2) {
 				e2.printStackTrace();
+				e.setResult(false);
+				return false;
 			} finally {
 				DBUtils.close(rs, ps, conn);
 			}
 		}else{
-			System.out.println("ÓÃ»§ÒÑ´æÔÚ£¡");
+			System.out.println("ç”¨æˆ·ä¸å­˜åœ¨ï¼");
+			e.setResult(false);
 			return false;
 		}
-		return true;
 	}
 	public boolean updateUser(Entity e) {
-		UserDao ud =new UserDao();
-		User u =new User();
-		u.setUsername(e.getUsername());
-		u.setPassword(e.getPassword());
-		if(ud.doLogin(u)!=0){
+		// æ£€æŸ¥ç”¨æˆ·æ˜¯å¦å­˜åœ¨
+		Entity userExists = findUser(e.getUsername());
+		if(userExists != null){
 			Connection conn = null;
 			PreparedStatement ps = null;
 			ResultSet rs = null;
@@ -134,22 +150,30 @@ public class UserDao {
 			sql = "update user set password=?,flag=? where username=?";
 			try {
 				conn = DBUtils.getConnection();
+				if (conn == null) {
+					System.err.println("è·å–è¿æ¥å¤±è´¥");
+					return false;
+				}
 				ps = conn.prepareStatement(sql);
 				ps.setString(1, e.getPassword());
 				ps.setInt(2, e.getRole());
 				ps.setString(3, e.getUsername());
 				int num = ps.executeUpdate();
+				if (num > 0) {
+					return true;
+				} else {
+					return false;
+				}
 			} catch (SQLException e3) {
 				e3.printStackTrace();
+				return false;
 			} finally {
 				DBUtils.close(rs, ps, conn);
 			}
 		}else{
-			System.out.println("ĞŞ¸ÄÊ§°Ü£¡");
+			System.out.println("ç”¨æˆ·ä¸å­˜åœ¨ï¼Œä¿®æ”¹å¤±è´¥ï¼");
 			return false;
 		}
-		
-		return true;
 	}
 	public Entity findUser(String username) {
 		// TODO Auto-generated method stub
@@ -162,12 +186,16 @@ public class UserDao {
 		
 		try {
 			conn = DBUtils.getConnection();
+			if (conn == null) {
+				System.err.println("è·å–è¿æ¥å¤±è´¥");
+				return null;
+			}
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, username);
-			rs = ps.executeQuery();//½ÓÊÜ½á¹û¼¯
+			rs = ps.executeQuery();//ï¿½ï¿½ï¿½Ü½ï¿½ï¿½ï¿½ï¿½
 			if (rs.next()) {
 				e=new Entity();
-				//¶ÁÈ¡½á¹û¼¯ÀïµÄÊôĞÔ£¬³õÊ¼»¯µ½ĞÂ¶ÔÏóÖĞ
+				//ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô£ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½Â¶ï¿½ï¿½ï¿½ï¿½ï¿½
 				e.setUsername(rs.getString("username"));
 				e.setPassword(rs.getString("password"));
 				e.setRole(rs.getInt("flag"));

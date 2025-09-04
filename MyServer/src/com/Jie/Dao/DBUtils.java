@@ -1,48 +1,107 @@
 package com.Jie.Dao;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.*;
+import java.util.Properties;
 import java.util.ResourceBundle;
 /**
  * Created by Jie on 2016/01/15.
  */
 public class DBUtils {
-    //Êı¾İ¿âÁ¬½ÓµØÖ·
+    //ï¿½ï¿½ï¿½İ¿ï¿½ï¿½ï¿½ï¿½Óµï¿½Ö·
     public static String URL;
-    //ÓÃ»§Ãû
+    //ï¿½Ã»ï¿½ï¿½ï¿½
     public static String USERNAME;
-    //ÃÜÂë
+    //ï¿½ï¿½ï¿½ï¿½
     public static String PASSWORD;
-    //mysqlµÄÇı¶¯Àà
+    //mysqlï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     public static String DRIVER;
     private DBUtils(){
     	
     }
-    //Ê¹ÓÃ¾²Ì¬¿é¼ÓÔØÇı¶¯³ÌĞò
+    //ä½¿ç”¨é™æ€å—åˆå§‹åŒ–æ•°æ®åº“é…ç½®
     static{
-        URL = "jdbc:mysql://localhost:3306/shop";
-        USERNAME = "root";
-        PASSWORD = "root";
-        DRIVER = "com.mysql.jdbc.Driver";
+        loadConfig();
         try {
             Class.forName(DRIVER);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
-    //¶¨ÒåÒ»¸ö»ñÈ¡Êı¾İ¿âÁ¬½ÓµÄ·½·¨
+    
+    /**
+     * åŠ è½½é…ç½®æ–‡ä»¶
+     */
+    private static void loadConfig() {
+        Properties props = new Properties();
+        InputStream input = null;
+        try {
+            // ä»ç±»è·¯å¾„åŠ è½½é…ç½®æ–‡ä»¶
+            input = DBUtils.class.getClassLoader().getResourceAsStream("config.properties");
+            if (input != null) {
+                props.load(input);
+                URL = props.getProperty("db.url", "jdbc:mysql://localhost:3306/shop");
+                USERNAME = props.getProperty("db.username", "root");
+                PASSWORD = props.getProperty("db.password", "root");
+                DRIVER = props.getProperty("db.driver", "com.mysql.jdbc.Driver");
+            } else {
+                // å¦‚æœé…ç½®æ–‡ä»¶ä¸å­˜åœ¨ï¼Œä½¿ç”¨é»˜è®¤å€¼
+                URL = "jdbc:mysql://localhost:3306/shop";
+                USERNAME = "root";
+                PASSWORD = "root";
+                DRIVER = "com.mysql.jdbc.Driver";
+                System.out.println("é…ç½®æ–‡ä»¶æœªæ‰¾åˆ°ï¼Œä½¿ç”¨é»˜è®¤æ•°æ®åº“é…ç½®");
+            }
+        } catch (IOException e) {
+            // åŠ è½½å¤±è´¥æ—¶ä½¿ç”¨é»˜è®¤é…ç½®
+            URL = "jdbc:mysql://localhost:3306/shop";
+            USERNAME = "root";
+            PASSWORD = "root";
+            DRIVER = "com.mysql.jdbc.Driver";
+            System.err.println("åŠ è½½é…ç½®æ–‡ä»¶å¤±è´¥ï¼Œä½¿ç”¨é»˜è®¤æ•°æ®åº“é…ç½®: " + e.getMessage());
+        } finally {
+            if (input != null) {
+                try {
+                    input.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+    //ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½È¡ï¿½ï¿½ï¿½İ¿ï¿½ï¿½ï¿½ï¿½ÓµÄ·ï¿½ï¿½ï¿½
     public static Connection getConnection(){
         Connection conn = null;
         try {
             conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+            // è®¾ç½®è¿æ¥è¶…æ—¶æ—¶é—´
+            if (conn != null) {
+                conn.setAutoCommit(true);
+                // æµ‹è¯•è¿æ¥æœ‰æ•ˆæ€§
+                if (!conn.isValid(3)) {
+                    conn.close();
+                    conn = null;
+                    System.err.println("æ•°æ®åº“è¿æ¥æ— æ•ˆ");
+                }
+            }
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("»ñÈ¡Á¬½ÓÊ§°Ü");
+            System.err.println("è·å–æ•°æ®åº“è¿æ¥å¤±è´¥: " + e.getMessage());
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e2) {
+                    e2.printStackTrace();
+                }
+                conn = null;
+            }
         }
         finally {
             return conn;
         }
     }
     /**
-     * ¹Ø±ÕÊı¾İ¿âÁ¬½Ó
+     * ï¿½Ø±ï¿½ï¿½ï¿½ï¿½İ¿ï¿½ï¿½ï¿½ï¿½ï¿½
      */
     public static void close(ResultSet rs,Statement stat,Connection conn){
         try {
