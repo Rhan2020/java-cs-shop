@@ -74,6 +74,22 @@
 
 ## ⚡ 快速开始
 
+### ⚠️ 重要说明
+
+**如果项目有问题或者跑不起来，请切换到 `backup` 分支：**
+
+```bash
+# 切换到原始版本（修复前）
+git checkout backup
+
+# 查看当前分支
+git branch
+```
+
+**分支说明：**
+- **`backup` 分支**：原始版本，包含修复前的代码
+- **`master` 分支**：基于 `backup` 分支，由 AI 修复部分功能并补充 SQL 的增强版本
+
 ### 📋 环境要求
 
 - **Java JDK 8** 或更高版本
@@ -230,6 +246,30 @@ java-cs-shop/
 ![找零界面](https://github.com/JieDreambuilder/java-cs-shop/blob/master/readmeImg/oddchange.png)
 
 ## ❓ 常见问题
+
+### 🔄 分支切换问题
+
+**Q: 项目运行出错，如何回退到原始版本？**
+
+A: 使用以下命令切换到原始版本：
+```bash
+# 切换到原始版本
+git checkout backup
+
+# 如果需要回到修复版本
+git checkout master
+```
+
+**Q: 如何查看当前在哪个分支？**
+
+A: 使用以下命令：
+```bash
+# 查看当前分支
+git branch
+
+# 查看所有分支
+git branch -a
+```
 
 ### 🔧 连接问题
 
