@@ -13,24 +13,38 @@ public class Net {
 	static Socket socket2;
 
 	public static void main(String[] args) throws Exception {
-		// ¿ªÆô·şÎñÆ÷
+		// å¯åŠ¨æœåŠ¡å™¨
 		Model model = new Model();
 		ServerSocket ss = new ServerSocket(8887);
-		// µÈ´ı¿Í»§¶ËÁ¬½Ó
+		System.out.println("æœåŠ¡å™¨å¯åŠ¨ï¼Œç›‘å¬ç«¯å£8887...");
+		// ç­‰å¾…å®¢æˆ·ç«¯è¿æ¥
 		while (true) {
-			Socket socket = ss.accept();
-			ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
-			ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
-			// ½ÓÊÜ¸ñÊ½»¯Êı¾İ
-			Entity e = (Entity) ois.readObject();
-			// ´¦ÀíÊı¾İ
-
-			e = model.service(e);
-			// ·µ»ØÊı¾İ½á¹û
-			oos.writeObject(e);
-			// ¹Ø±Õ´«ÊäÁ÷
-			ois.close();
-			oos.close();
+			Socket socket = null;
+			ObjectOutputStream oos = null;
+			ObjectInputStream ois = null;
+			try {
+				socket = ss.accept();
+				oos = new ObjectOutputStream(socket.getOutputStream());
+				ois = new ObjectInputStream(socket.getInputStream());
+				// æ¥æ”¶æ ¼å¼åŒ–æ•°æ®
+				Entity e = (Entity) ois.readObject();
+				// ä¸šåŠ¡å¤„ç†
+				e = model.service(e);
+				// è¿”å›æ•°æ®ç»“æœ
+				oos.writeObject(e);
+			} catch (Exception e) {
+				System.err.println("å¤„ç†å®¢æˆ·ç«¯è¯·æ±‚æ—¶å‘ç”Ÿé”™è¯¯: " + e.getMessage());
+				e.printStackTrace();
+			} finally {
+				// å…³é—­æµå’Œè¿æ¥
+				try {
+					if (ois != null) ois.close();
+					if (oos != null) oos.close();
+					if (socket != null) socket.close();
+				} catch (Exception e) {
+					System.err.println("å…³é—­è¿æ¥æ—¶å‘ç”Ÿé”™è¯¯: " + e.getMessage());
+				}
+			}
 		}
 
 	}

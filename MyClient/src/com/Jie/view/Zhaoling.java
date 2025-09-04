@@ -21,7 +21,7 @@ public class Zhaoling extends JFrame {
 	private JTextField textField_2;
 
 	public Zhaoling() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 251, 210);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -29,17 +29,17 @@ public class Zhaoling extends JFrame {
 		setContentPane(contentPane);
 		
 		JLabel label = new JLabel("\u627E\u96F6");
-		label.setFont(new Font("����", Font.PLAIN, 16));
+		label.setFont(new Font("����", Font.PLAIN, 16));
 		label.setBounds(90, 20, 54, 15);
 		contentPane.add(label);
 		
 		JLabel label_1 = new JLabel("\u5E94\u6536\uFF1A");
-		label_1.setFont(new Font("����", Font.PLAIN, 16));
+		label_1.setFont(new Font("����", Font.PLAIN, 16));
 		label_1.setBounds(35, 57, 54, 15);
 		contentPane.add(label_1);
 		
 		JLabel label_2 = new JLabel("\u5B9E\u6536\uFF1A");
-		label_2.setFont(new Font("����", Font.PLAIN, 16));
+		label_2.setFont(new Font("����", Font.PLAIN, 16));
 		label_2.setBounds(35, 89, 54, 15);
 		contentPane.add(label_2);
 		
@@ -66,10 +66,34 @@ public class Zhaoling extends JFrame {
 		JButton btnNewButton_1 = new JButton("\u627E\u96F6");
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				int k = 0;
-				k=Integer.valueOf(textField_1.getText())-Integer.valueOf(textField.getText());
-				String s=k+"";
-				textField_2.setText(s);
+				try {
+					String receivedText = textField_1.getText();
+					String shouldPayText = textField.getText();
+					
+					if (receivedText == null || receivedText.trim().isEmpty()) {
+						javax.swing.JOptionPane.showMessageDialog(null, "请输入实收金额！", "错误", javax.swing.JOptionPane.ERROR_MESSAGE);
+						return;
+					}
+					
+					if (shouldPayText == null || shouldPayText.trim().isEmpty()) {
+						javax.swing.JOptionPane.showMessageDialog(null, "请输入应收金额！", "错误", javax.swing.JOptionPane.ERROR_MESSAGE);
+						return;
+					}
+					
+					double received = Double.parseDouble(receivedText.trim());
+					double shouldPay = Double.parseDouble(shouldPayText.trim());
+					
+					if (received < shouldPay) {
+						javax.swing.JOptionPane.showMessageDialog(null, "实收金额不能少于应收金额！", "错误", javax.swing.JOptionPane.ERROR_MESSAGE);
+						return;
+					}
+					
+					double change = received - shouldPay;
+					textField_2.setText(String.format("%.2f", change));
+					
+				} catch (NumberFormatException ex) {
+					javax.swing.JOptionPane.showMessageDialog(null, "请输入有效的金额数字！", "错误", javax.swing.JOptionPane.ERROR_MESSAGE);
+				}
 			}
 		});
 		btnNewButton_1.setBounds(10, 114, 66, 28);

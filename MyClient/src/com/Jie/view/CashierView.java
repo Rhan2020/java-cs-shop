@@ -11,15 +11,16 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import com.Jie.Entity.Entity;
 import com.Jie.model.Model;
+import com.Jie.utils.PriceCalculator;
 
 import javax.swing.JTree;
-import javax.swing.JTable;
-import javax.swing.SwingConstants;
 
 public class CashierView extends JFrame {
 
@@ -47,8 +48,8 @@ public class CashierView extends JFrame {
 		panel.setLayout(null);
 		
 		panel.setVisible(true);
-		JLabel label1 = new JLabel("»¶Ó­Äã£¡  ÊÕÒøÔ±:"+name);
-		label1.setFont(new Font("ËÎÌå", Font.PLAIN, 18));
+		JLabel label1 = new JLabel("æ¬¢è¿æ‚¨ï¼  æ”¶é“¶å‘˜:"+name);
+		label1.setFont(new Font("å®‹ä½“", Font.PLAIN, 18));
 		label1.setBounds(204, 22, 220, 47);
 		panel.add(label1);
 		
@@ -58,10 +59,10 @@ public class CashierView extends JFrame {
 		panel.add(textField1);
 		textField1.setColumns(10);
 		
-		JButton button1 = new JButton("É¨Ãè");//´´½¨É¨ÃèÉÌÆ·°´Å¥
+		JButton button1 = new JButton("æ‰«æ");//æ‰«æå•†å“æŒ‰é’®
 		button1.setBackground(Color.WHITE);
 		
-		//É¨Ãè°´Å¥´¥·¢µÄÊÂ¼ş
+		//æ‰«ææŒ‰é’®ç‚¹å‡»äº‹ä»¶
 		button1.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -69,10 +70,19 @@ public class CashierView extends JFrame {
 				String goodsid=textField1.getText();
 				
 				String message =Model.goodsFindById(goodsid);
+				
+				// æ£€æŸ¥å•†å“æ˜¯å¦æ‰¾åˆ°
+				if (message == null) {
+					// å•†å“ä¸å­˜åœ¨ï¼Œæ˜¾ç¤ºé”™è¯¯ä¿¡æ¯
+					javax.swing.JOptionPane.showMessageDialog(null, "å•†å“ä¸å­˜åœ¨ï¼Œè¯·æ£€æŸ¥å•†å“IDï¼", "é”™è¯¯", javax.swing.JOptionPane.ERROR_MESSAGE);
+					textField1.setText(""); // æ¸…ç©ºè¾“å…¥æ¡†
+					return;
+				}
+				
 				if(textField.getText().equals("")){
 					textField.setText(message);
 					String [] count ={
-							message                       //´´½¨Êı×é£¬±£´æÒÑÉ¨ÃèµÄÉÌÆ·ĞÅÏ¢
+							message                       //å•†å“æ•°ç»„ï¼Œå­˜å‚¨æ‰«æåˆ°çš„å•†å“ä¿¡æ¯
 					};
 					count1=count;
 				}
@@ -105,66 +115,115 @@ public class CashierView extends JFrame {
 					count1=count;
 				}
 				else{
-					textField1.setText("¹ºÎï³µÒÑÂú£¡");
+					textField1.setText("è´­ç‰©è½¦å·²æ»¡");
 				}
 			}
 			
 		});
-		button1.setFont(new Font("ËÎÌå", Font.PLAIN, 16));
+		button1.setFont(new Font("å®‹ä½“", Font.PLAIN, 16));
 		button1.setBounds(409, 77, 150, 44);
 		panel.add(button1);
 		
-		JButton button = new JButton("´òÓ¡Æ¾Ìõ");
+		JButton button = new JButton("æ‰“å°å‡­æ¡");
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				textField.getText();
-				textField_2.getText();
-				textField_3.getText();
-				textField_4.getText();
-				textField_5.getText();
-				textField_10.getText();
-				textField_11.getText();
-				textField_12.getText();
-				textField_13.getText();
-				textField_14.getText();
-				String me="    ÉÌÆ·           "+"   ÊıÁ¿        \n"+
-						count1[0]+"  "+textField_10.getText()+"\n"+
-						count1[1]+"  "+textField_11.getText()+"\n"+
-						count1[2]+"  "+textField_12.getText()+"\n"+
-						count1[3]+"  "+textField_13.getText()+"\n"+
-						count1[4]+"  "+textField_14.getText()+"\n"+
-				"×Ü¼Æ£º"+"14Ôª";
+				// æ£€æŸ¥æ˜¯å¦æœ‰å•†å“
+				if (count1 == null || count1.length == 0) {
+					javax.swing.JOptionPane.showMessageDialog(null, "è¯·å…ˆæ‰«æå•†å“ï¼", "æç¤º", javax.swing.JOptionPane.WARNING_MESSAGE);
+					return;
+				}
+				
+				// æ£€æŸ¥æ˜¯å¦æœ‰æœ‰æ•ˆçš„å•†å“å’Œæ•°é‡
+				boolean hasValidItem = false;
+				String[] quantities = {
+					textField_10.getText(),
+					textField_11.getText(),
+					textField_12.getText(),
+					textField_13.getText(),
+					textField_14.getText()
+				};
+				
+				for (int i = 0; i < count1.length && i < quantities.length; i++) {
+					if (count1[i] != null && !count1[i].trim().isEmpty() && 
+						quantities[i] != null && !quantities[i].trim().isEmpty()) {
+						try {
+							int qty = Integer.parseInt(quantities[i].trim());
+							if (qty > 0) {
+								hasValidItem = true;
+								break;
+							}
+						} catch (NumberFormatException ex) {
+							// å¿½ç•¥æ— æ•ˆæ•°é‡
+						}
+					}
+				}
+				
+				if (!hasValidItem) {
+					javax.swing.JOptionPane.showMessageDialog(null, "è¯·è¾“å…¥æœ‰æ•ˆçš„å•†å“æ•°é‡ï¼", "æç¤º", javax.swing.JOptionPane.WARNING_MESSAGE);
+					return;
+				}
+				
+				// éªŒè¯åº“å­˜å……è¶³æ€§
+				String stockValidation = PriceCalculator.validateStock(count1, quantities);
+				if (stockValidation != null) {
+					javax.swing.JOptionPane.showMessageDialog(null, stockValidation, "åº“å­˜ä¸è¶³", javax.swing.JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+				
+				// è®¡ç®—æ€»ä»·
+				double totalPrice = 0.0;
+				try {
+					totalPrice = PriceCalculator.calculateTotal(count1, quantities);
+				} catch (IllegalArgumentException ex) {
+					javax.swing.JOptionPane.showMessageDialog(null, ex.getMessage(), "åº“å­˜ä¸è¶³", javax.swing.JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+				
+				String me="    å•†å“           "+"   æ•°é‡        \n"+
+						(count1 != null && count1.length > 0 && count1[0] != null ? count1[0]+"  "+textField_10.getText()+"\n" : "")+
+						(count1 != null && count1.length > 1 && count1[1] != null ? count1[1]+"  "+textField_11.getText()+"\n" : "")+
+						(count1 != null && count1.length > 2 && count1[2] != null ? count1[2]+"  "+textField_12.getText()+"\n" : "")+
+						(count1 != null && count1.length > 3 && count1[3] != null ? count1[3]+"  "+textField_13.getText()+"\n" : "")+
+						(count1 != null && count1.length > 4 && count1[4] != null ? count1[4]+"  "+textField_14.getText()+"\n" : "")+
+				"æ€»è®¡ï¼š"+PriceCalculator.formatPrice(totalPrice);
 				Pingtiao p =new Pingtiao(me);
 				p.setVisible(true);
+				// æ¸…ç©ºå•†å“åˆ—è¡¨å’Œæ•°é‡è¾“å…¥
 				textField.setText("");
 				textField_2.setText("");
 				textField_3.setText("");
 				textField_4.setText("");
 				textField_5.setText("");
+				textField_10.setText("");
+				textField_11.setText("");
+				textField_12.setText("");
+				textField_13.setText("");
+				textField_14.setText("");
+				count1 = null; // æ¸…ç©ºå•†å“æ•°ç»„
 			}
 
 		});
-		button.setFont(new Font("ËÎÌå", Font.PLAIN, 16));
+		button.setFont(new Font("å®‹ä½“", Font.PLAIN, 16));
 		button.setBackground(Color.WHITE);
 		button.setBounds(409, 185, 150, 44);
 		panel.add(button);
 		
-		JButton button_1 = new JButton("ÕÒÁã");
+		JButton button_1 = new JButton("æ‰¾é›¶");
 		button_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Zhaoling z =new Zhaoling();
 				z.setVisible(true);
 			}
 		});
-		button_1.setFont(new Font("ËÎÌå", Font.PLAIN, 16));
+		button_1.setFont(new Font("å®‹ä½“", Font.PLAIN, 16));
 		button_1.setBackground(Color.WHITE);
 		button_1.setBounds(409, 278, 150, 44);
 		panel.add(button_1);
 		
 		textField = new JTextField();
 		textField.setHorizontalAlignment(SwingConstants.CENTER);
-		textField.setFont(new Font("ËÎÌå", Font.BOLD, 18));
-		//´òÓ¡Æ¾Ìõ¡¢Ìí¼Ó
+		textField.setFont(new Font("å®‹ä½“", Font.BOLD, 18));
+		//æ‰“å°å‡­æ¡å•†å“ä¿¡æ¯
 		
 		textField.setBounds(35, 156, 226, 27);
 		panel.add(textField);
@@ -172,28 +231,28 @@ public class CashierView extends JFrame {
 		
 		textField_2 = new JTextField();
 		textField_2.setHorizontalAlignment(SwingConstants.CENTER);
-		textField_2.setFont(new Font("ËÎÌå", Font.BOLD, 18));
+		textField_2.setFont(new Font("å®‹ä½“", Font.BOLD, 18));
 		textField_2.setColumns(10);
 		textField_2.setBounds(35, 202, 226, 27);
 		panel.add(textField_2);
 		
 		textField_3 = new JTextField();
 		textField_3.setHorizontalAlignment(SwingConstants.CENTER);
-		textField_3.setFont(new Font("ËÎÌå", Font.BOLD, 18));
+		textField_3.setFont(new Font("å®‹ä½“", Font.BOLD, 18));
 		textField_3.setColumns(10);
 		textField_3.setBounds(35, 249, 226, 27);
 		panel.add(textField_3);
 		
 		textField_4 = new JTextField();
 		textField_4.setHorizontalAlignment(SwingConstants.CENTER);
-		textField_4.setFont(new Font("ËÎÌå", Font.BOLD, 18));
+		textField_4.setFont(new Font("å®‹ä½“", Font.BOLD, 18));
 		textField_4.setColumns(10);
 		textField_4.setBounds(35, 295, 226, 27);
 		panel.add(textField_4);
 		
 		textField_5 = new JTextField();
 		textField_5.setHorizontalAlignment(SwingConstants.CENTER);
-		textField_5.setFont(new Font("ËÎÌå", Font.BOLD, 18));
+		textField_5.setFont(new Font("å®‹ä½“", Font.BOLD, 18));
 		textField_5.setColumns(10);
 		textField_5.setBounds(35, 339, 226, 27);
 		panel.add(textField_5);
@@ -223,33 +282,33 @@ public class CashierView extends JFrame {
 		textField_14.setBounds(322, 344, 34, 21);
 		panel.add(textField_14);
 		
-		JLabel label = new JLabel("\u6570\u91CF\uFF1A");
-		label.setFont(new Font("ËÎÌå", Font.PLAIN, 16));
+		JLabel label = new JLabel("æ•°é‡ï¼š");
+		label.setFont(new Font("å®‹ä½“", Font.PLAIN, 16));
 		label.setBounds(271, 163, 48, 15);
 		panel.add(label);
 		
-		JLabel label_1 = new JLabel("\u6570\u91CF\uFF1A");
-		label_1.setFont(new Font("ËÎÌå", Font.PLAIN, 16));
+		JLabel label_1 = new JLabel("æ•°é‡ï¼š");
+		label_1.setFont(new Font("å®‹ä½“", Font.PLAIN, 16));
 		label_1.setBounds(271, 209, 48, 15);
 		panel.add(label_1);
 		
-		JLabel label_2 = new JLabel("\u6570\u91CF\uFF1A");
-		label_2.setFont(new Font("ËÎÌå", Font.PLAIN, 16));
+		JLabel label_2 = new JLabel("æ•°é‡ï¼š");
+		label_2.setFont(new Font("å®‹ä½“", Font.PLAIN, 16));
 		label_2.setBounds(271, 256, 48, 15);
 		panel.add(label_2);
 		
-		JLabel label_3 = new JLabel("\u6570\u91CF\uFF1A");
-		label_3.setFont(new Font("ËÎÌå", Font.PLAIN, 16));
+		JLabel label_3 = new JLabel("æ•°é‡ï¼š");
+		label_3.setFont(new Font("å®‹ä½“", Font.PLAIN, 16));
 		label_3.setBounds(271, 302, 48, 15);
 		panel.add(label_3);
 		
-		JLabel label_4 = new JLabel("\u6570\u91CF\uFF1A");
-		label_4.setFont(new Font("ËÎÌå", Font.PLAIN, 16));
+		JLabel label_4 = new JLabel("æ•°é‡ï¼š");
+		label_4.setFont(new Font("å®‹ä½“", Font.PLAIN, 16));
 		label_4.setBounds(271, 346, 48, 15);
 		panel.add(label_4);
 		
-		JLabel lblid = new JLabel("\u5546\u54C1ID");
-		lblid.setFont(new Font("ËÎÌå", Font.PLAIN, 16));
+		JLabel lblid = new JLabel("å•†å“ID");
+		lblid.setFont(new Font("å®‹ä½“", Font.PLAIN, 16));
 		lblid.setBounds(35, 93, 61, 15);
 		panel.add(lblid);
 		

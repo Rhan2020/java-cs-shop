@@ -11,72 +11,87 @@ public class Model {
 	public Entity service(Entity e) {
 		// TODO Auto-generated method stub
 		if(e.getFlag()==0){
-			//Ö´ĞĞµÇÂ¼·½·¨
+			//Ö´ï¿½Ğµï¿½Â¼ï¿½ï¿½ï¿½ï¿½
 			e.setFlag(dologin(e.getUsername(), e.getPassword()));
 		}
 		if(e.getFlag()==4){
-			//Ö´ĞĞ²éÑ¯ÉÌÆ··½·¨
-			Goods g =new Goods();
-			g= findGoodsById(e.getGoodsid());
-			e.setGoodsid(g.getGoodsId());
-			e.setGoodsname(g.getGoodsName());
-			e.setGoodsprice(g.getGoodsPrice());
-			e.setGoodscount(g.getGoodsCount());
+			//æ‰§è¡ŒæŸ¥è¯¢å•†å“æ“ä½œ
+			Goods g = findGoodsById(e.getGoodsid());
+			if (g != null) {
+				e.setGoodsid(g.getGoodsId());
+				e.setGoodsname(g.getGoodsName());
+				e.setGoodsprice(g.getGoodsPrice());
+				e.setGoodscount(g.getGoodsCount());
+			} else {
+				// å•†å“ä¸å­˜åœ¨ï¼Œè®¾ç½®ä¸ºnull
+				e.setGoodsid(null);
+				e.setGoodsname(null);
+				e.setGoodsprice(null);
+				e.setGoodscount(null);
+			}
 		}
 		if(e.getFlag()==5){
-			//Ö´ĞĞĞÂÔöÉÌÆ··½·¨
+			//Ö´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ·ï¿½ï¿½ï¿½ï¿½
 			GoodsDao gd=new GoodsDao();
 			e.setResult(gd.add(e));
 		}
 		if(e.getFlag()==6){
-			//Ö´ĞĞĞÂÔöÉÌÆ··½·¨
+			//Ö´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ·ï¿½ï¿½ï¿½ï¿½
 			GoodsDao gd=new GoodsDao();
 			e.setResult(gd.del(e));
 		}
 		if(e.getFlag()==7){
-			//Ö´ĞĞĞÂÔöÉÌÆ··½·¨
+			//Ö´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ·ï¿½ï¿½ï¿½ï¿½
 			GoodsDao gd=new GoodsDao();
 			e.setResult(gd.update(e));
 		}
 		if(e.getFlag()==10){
-			//Ö´ĞĞĞÂÔöÉÌÆ··½·¨
+			//Ö´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ·ï¿½ï¿½ï¿½ï¿½
 			UserDao ud=new UserDao();
 			
 			e.setResult(ud.add(e));
 		}
 		if(e.getFlag()==11){
-			//Ö´ĞĞĞÂÔöÉÌÆ··½·¨
+			//Ö´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ·ï¿½ï¿½ï¿½ï¿½
 			UserDao ud=new UserDao();
 			
 			e.setResult(ud.del(e));
 		}
 		if(e.getFlag()==12){
-			//Ö´ĞĞĞÂÔöÉÌÆ··½·¨
+			//Ö´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ·ï¿½ï¿½ï¿½ï¿½
 			UserDao ud=new UserDao();
 			
 			e.setResult(ud.updateUser(e));
 		}
 		if(e.getFlag()==13){
-			//Ö´ĞĞĞÂÔöÉÌÆ··½·¨
+			//æ‰§è¡ŒæŸ¥è¯¢ç”¨æˆ·æ“ä½œ
 			UserDao ud=new UserDao();
-			e=ud.findUser(e.getUsername());
+			Entity foundUser = ud.findUser(e.getUsername());
+			if (foundUser != null) {
+				e = foundUser; // è¿”å›æ‰¾åˆ°çš„ç”¨æˆ·ä¿¡æ¯
+			} else {
+				// ç”¨æˆ·ä¸å­˜åœ¨ï¼Œè¿”å›ä¸€ä¸ªæ ‡è¯†nullçš„Entity
+				e.setUsername(null);
+				e.setPassword(null);
+				e.setRole(0);
+			}
 		}
 		
 
 		return e;
 	}
 
-	// ´¦ÀíµÇÂ¼·½·¨
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â¼ï¿½ï¿½ï¿½ï¿½
 	private int dologin(String username, String password) {
 		// TODO Auto-generated method stub
 		User u = new User();
-		u.setPassword(username);
 		u.setUsername(username);
+		u.setPassword(password);
 		UserDao ud =new UserDao();
 		return ud.doLogin(u);
 	}
 	
-	//²éÑ¯ÉÌÆ··½·¨
+	//ï¿½ï¿½Ñ¯ï¿½ï¿½Æ·ï¿½ï¿½ï¿½ï¿½
 	private Goods findGoodsById(String goodsid){
 		Goods g =new Goods();
 		GoodsDao gd =new GoodsDao();

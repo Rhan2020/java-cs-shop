@@ -10,7 +10,7 @@ import com.Jie.Entity.Entity;
 public class GoodsDao {
 
 	/*
-	 * ÉÌÆ·²éÑ¯·½·¨
+	 * ï¿½ï¿½Æ·ï¿½ï¿½Ñ¯ï¿½ï¿½ï¿½ï¿½
 	 */
 	public Goods FindById(String goodsid) {
 		Connection conn = null;
@@ -21,12 +21,16 @@ public class GoodsDao {
 		sql = "select * from goods where goodsid=?";
 		try {
 			conn = DBUtils.getConnection();
+			if (conn == null) {
+				System.err.println("è·å–è¿æ¥å¤±è´¥");
+				return null;
+			}
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, goodsid);
-			rs = ps.executeQuery();//½ÓÊÜ½á¹û¼¯
+			rs = ps.executeQuery();//ï¿½ï¿½ï¿½Ü½ï¿½ï¿½ï¿½ï¿½
 			if (rs.next()) {
 				rg = new Goods();
-				//¶ÁÈ¡½á¹û¼¯ÀïµÄÊôĞÔ£¬³õÊ¼»¯µ½ĞÂ¶ÔÏóÖĞ
+				//ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô£ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½Â¶ï¿½ï¿½ï¿½ï¿½ï¿½
 				rg.setGoodsId(goodsid);
 				rg.setGoodsName(rs.getString("goodsname"));
 				rg.setGoodsPrice(rs.getString("goodsprice"));
@@ -46,7 +50,7 @@ public class GoodsDao {
 	
 	
 	/*
-	 * Ìí¼ÓÉÌÆ··½·¨
+	 * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ·ï¿½ï¿½ï¿½ï¿½
 	 */
 	public boolean add(Entity g) {
 		GoodsDao gd =new GoodsDao();
@@ -55,46 +59,42 @@ public class GoodsDao {
 			PreparedStatement ps = null;
 			ResultSet rs = null;
 			String sql = "";
-			sql = "insert into goods (goodsid,goodsname,goodsprice,goodscount)value(?,?,?,?)";
+			sql = "insert into goods (goodsid,goodsname,goodsprice,goodscount) values(?,?,?,?)";
 			try {
 				conn = DBUtils.getConnection();
+				if (conn == null) {
+					System.err.println("è·å–è¿æ¥å¤±è´¥");
+					return false;
+				}
 				ps = conn.prepareStatement(sql);
 				ps.setString(1, g.getGoodsid());
 				ps.setString(2, g.getGoodsname());
 				ps.setString(3, g.getGoodsprice());
 				ps.setString(4, g.getGoodscount());
 				int num = ps.executeUpdate();
+				if (num > 0) {
+					return true;
+				} else {
+					return false;
+				}
 			} catch (SQLException e) {
 				e.printStackTrace();
+				return false;
 			} finally {
 				DBUtils.close(rs, ps, conn);
 			}
 		}else{
-			System.out.println("ÉÌÆ·ÒÑ´æÔÚ£¡");
+			System.out.println("å•†å“å·²å­˜åœ¨ï¼");
 			return false;
 		}
-		
-		return true;
 	}
 	
 	
 	
-	/*
-	 * test
-	 */
-	public static void main(String[] args) {
-		GoodsDao gd =new GoodsDao();
-		Goods g =new Goods();
-		g.setGoodsId("10086");
-		g=gd.FindById(g.getGoodsId());
-		System.out.println(g.getGoodsId()+g.getGoodsName()+g.getGoodsPrice()+g.getGoodsCount());
-		double d=0;
-		System.out.println(Double.valueOf(g.getGoodsPrice()));
-	}
 
 
 	/*
-	 * É¾³ıÉÌÆ··½·¨
+	 * É¾ï¿½ï¿½ï¿½ï¿½Æ·ï¿½ï¿½ï¿½ï¿½
 	 */
 	public boolean del(Entity g) {
 		GoodsDao gd =new GoodsDao();
@@ -106,25 +106,33 @@ public class GoodsDao {
 			sql = "delete from goods where goodsid = ?";
 			try {
 				conn = DBUtils.getConnection();
+				if (conn == null) {
+					System.err.println("è·å–è¿æ¥å¤±è´¥");
+					return false;
+				}
 				ps = conn.prepareStatement(sql);
 				ps.setString(1, g.getGoodsid());
 				int num = ps.executeUpdate();
+				if (num > 0) {
+					return true;
+				} else {
+					return false;
+				}
 			} catch (SQLException e) {
 				e.printStackTrace();
+				return false;
 			} finally {
 				DBUtils.close(rs, ps, conn);
 			}
 		}else{
-			System.out.println("ÉÌÆ·²»´æÔÚ£¡");
+			System.out.println("å•†å“ä¸å­˜åœ¨ï¼");
 			return false;
 		}
-		
-		return true;
 	}
 
 
 	/*
-	 * ĞŞ¸ÄÉÌÆ··½·¨
+	 * ï¿½Ş¸ï¿½ï¿½ï¿½Æ·ï¿½ï¿½ï¿½ï¿½
 	 */
 	public boolean update(Entity g) {
 		GoodsDao gd =new GoodsDao();
@@ -136,23 +144,31 @@ public class GoodsDao {
 			sql = "update goods set goodsname=?,goodsprice=?,goodscount=? where goodsid=?";
 			try {
 				conn = DBUtils.getConnection();
+				if (conn == null) {
+					System.err.println("è·å–è¿æ¥å¤±è´¥");
+					return false;
+				}
 				ps = conn.prepareStatement(sql);
-				ps.setString(4, g.getGoodsid());
 				ps.setString(1, g.getGoodsname());
 				ps.setString(2, g.getGoodsprice());
 				ps.setString(3, g.getGoodscount());
+				ps.setString(4, g.getGoodsid());
 				int num = ps.executeUpdate();
+				if (num > 0) {
+					return true;
+				} else {
+					return false;
+				}
 			} catch (SQLException e) {
 				e.printStackTrace();
+				return false;
 			} finally {
 				DBUtils.close(rs, ps, conn);
 			}
 		}else{
-			System.out.println("ĞŞ¸ÄÊ§°Ü£¡");
+			System.out.println("å•†å“ä¸å­˜åœ¨ï¼Œä¿®æ”¹å¤±è´¥ï¼");
 			return false;
 		}
-		
-		return true;
 	}
 	
 	
